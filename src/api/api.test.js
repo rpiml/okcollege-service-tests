@@ -2,7 +2,7 @@
 
 import { startCoreServices, startService, stopService, stopServices } from '../docker-compose';
 
-jasmine.DEFAULT_TIMEOUT_INTERVAL = 12000;
+jasmine.DEFAULT_TIMEOUT_INTERVAL = 60000;
 jasmine.VERBOSE = true;
 
 import request from 'request';

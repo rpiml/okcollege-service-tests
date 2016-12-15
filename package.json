@@ -1,7 +1,7 @@
 {
-  "name": "node-flowtype-boilerplate",
+  "name": "okcollege-service-tests",
   "version": "0.0.0",
-  "description": "Minimalistic boilerplate to quick-start Node.js development in ES6+ (stage-3) with Flow type checking.",
+  "description": "OkCollege Service Testing",
   "engineStrict": true,
   "engines": {
     "node": ">= 6.2"
@@ -32,7 +32,7 @@
     "typecheck": "flow check",
     "pretest": "npm run lint",
     "test": "npm run test-only",
-    "test-only": "jest",
+    "test-only": "jest --coverage",
     "test:watch": "jest --watch",
     "build": "babel src/**/*.js -d dist",
     "build:watch": "babel --watch src/**/*.js -d dist"
@@ -53,6 +53,10 @@
     "moduleFileExtensions": [
       "js"
     ],
+    "testPathIgnorePatterns": [
+      "/node_modules/",
+      "/dist/"
+    ],
     "coverageDirectory": "coverage",
     "collectCoverageFrom": [
       "src/**/*.js"
@@ -61,6 +65,7 @@
   "dependencies": {
     "amqplib": "^0.5.1",
     "babel-runtime": "~6.20.0",
+    "dockerode": "^2.3.1",
     "redis": "^2.6.3",
     "request": "^2.79.0"
   }
