@@ -24,7 +24,7 @@ function dataLogger(context:String){
   };
 }
 
-export async function startService(serviceName:String){
+export async function startService(serviceName:string){
 
   // Start Service Process
   const proc = spawn('docker-compose', ['-f', dockerComposePath, 'up', serviceName]);
