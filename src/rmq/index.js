@@ -1,2 +1,6 @@
-export { csvpredict } from './csvpredict';
-export { fullpredict } from './fullpredict';
+// @flow
+
+import csvpredict from './csvpredict';
+import fullpredict from './fullpredict';
+
+export { csvpredict, fullpredict };
