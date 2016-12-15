@@ -1,22 +1,24 @@
 // @flow
 
 import redis from 'redis';
-import college_features from './college_features.csv';
-import college_training from './college_training.csv';
-import survey_features from './survey_features.csv';
-import survey_training from './survey_training.csv';
+import { readFileSync } from 'fs';
+import path from 'path';
 
 const redisKeys = {
-  'learning:college_features.csv': college_features,
-  'learning:college_training.csv': college_training,
-  'learning:survey_features.csv': survey_features,
-  'learning:survey_training.csv': survey_training,
+  'learning:college_features.csv': readFileSync(
+      path.resolve(__dirname, './college_features.csv')).toString(),
+  'learning:college_training.csv': readFileSync(
+      path.resolve(__dirname, './college_training.csv')).toString(),
+  'learning:survey_features.csv': readFileSync(
+      path.resolve(__dirname, './survey_features.csv')).toString(),
+  'learning:survey_training.csv': readFileSync(
+      path.resolve(__dirname, './survey_training.csv')).toString(),
 };
 
 export async function setup(): Promise<*> {
   const client = redis.createClient();
 
-  redisKeys.keys().forEach((key) => {
+  Object.keys(redisKeys).forEach((key) => {
     client.set(key, redisKeys[key]);
   });
 }

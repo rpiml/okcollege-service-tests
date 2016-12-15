@@ -23,35 +23,27 @@
     "eslint-plugin-import": "~2.2.0",
     "eslint-plugin-no-async-without-await": "~1.2.0",
     "flow-bin": "~0.37.0",
-    "jest": "~17.0.3"
+    "jest": "^18.0.0"
   },
   "scripts": {
     "clean": "rm -rf coverage dist tmp",
     "lint": "eslint .",
     "postlint": "npm run typecheck",
     "typecheck": "flow check",
-    "pretest": "npm run lint",
     "test": "npm run test-only",
-    "test-only": "jest --coverage",
-    "test:watch": "jest --watch",
+    "test-only": "jest --runInBand",
+    "test:watch": "jest --runInBand --watch",
     "build": "babel src/**/*.js -d dist",
     "build:watch": "babel --watch src/**/*.js -d dist"
   },
-  "author": "Jakub Synowiec <jakub@jakubsynowiec.info> (https://jakubsynowiec.info)",
+  "author": "Severin Ibarluzea",
   "license": "MIT",
-  "repository": {
-    "type": "git",
-    "url": "https://github.com/jsynowiec/node-flowtype-boilerplate.git"
-  },
-  "bugs": {
-    "url": "https://github.com/jsynowiec/node-flowtype-boilerplate/issues"
-  },
-  "homepage": "https://github.com/jsynowiec/node-flowtype-boilerplate#readme",
   "jest": {
     "testEnvironment": "node",
     "automock": false,
     "moduleFileExtensions": [
-      "js"
+      "js",
+      "json"
     ],
     "testPathIgnorePatterns": [
       "/node_modules/",

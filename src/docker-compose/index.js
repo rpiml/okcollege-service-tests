@@ -11,7 +11,6 @@ const testLogs = [];
 const coreServices = ['postgres', 'redis', 'rabbitmq', 'nginx'];
 
 const serviceWaitTimes = {
-
 };
 
 const serviceProcesses = {};
@@ -23,14 +22,14 @@ export async function cleanSystem() : Promise<*> {
   if (!systemCleaned) {
     console.log('Shutting down containers...');
     dockerDaemon = new Docker();
-    await (new Promise((resolve) => {
+    await new Promise((resolve) => {
       // Shut down all currently running containers
       dockerDaemon.listContainers((err, containers) => {
         Promise.all([containers.map((containerInfo) => new Promise((onStop) => {
           dockerDaemon.getContainer(containerInfo.Id).stop(() => onStop());
         }))]).then(resolve);
       });
-    }));
+    });
     console.log('Containers shut down.');
     systemCleaned = true;
   }
@@ -68,7 +67,7 @@ export async function startService(serviceName: string) {
 
   // Wait until service startes
   // TODO add new methods (e.g. watching stdout) to wait for services to start
-  const waitTime = serviceWaitTimes[serviceName] || 1000;
+  const waitTime = serviceWaitTimes[serviceName] || 10000;
   await new Promise((resolve) => {
     setTimeout(() => resolve(), waitTime);
   });
