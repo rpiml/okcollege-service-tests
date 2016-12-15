@@ -31,7 +31,7 @@
     "typecheck": "flow check",
     "pretest": "npm run lint",
     "test": "npm run test-only",
-    "test-only": "jest --coverage",
+    "test-only": "jest",
     "test:watch": "jest --watch",
     "build": "babel src/**/*.js -d dist",
     "build:watch": "babel --watch src/**/*.js -d dist"
@@ -48,6 +48,7 @@
   "homepage": "https://github.com/jsynowiec/node-flowtype-boilerplate#readme",
   "jest": {
     "testEnvironment": "node",
+    "automock": false,
     "moduleFileExtensions": [
       "js"
     ],
@@ -57,7 +58,9 @@
     ]
   },
   "dependencies": {
+    "amqplib": "^0.5.1",
     "babel-runtime": "~6.20.0",
+    "redis": "^2.6.3",
     "request": "^2.79.0"
   }
 }
