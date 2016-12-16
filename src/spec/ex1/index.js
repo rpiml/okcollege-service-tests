@@ -22,7 +22,6 @@ export const sampleOutputPrediction = readFileSync(
   path.resolve(__dirname, './sample_output_prediction.csv')).toString();
 
 export async function setup(): Promise<*> {
-  console.log('Calling setup');
   const client = redis.createClient();
 
   Object.keys(redisKeys).forEach((key) => {
