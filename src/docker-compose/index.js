@@ -10,8 +10,8 @@ const coreServices = ['postgres', 'redis', 'rabbitmq', 'nginx'];
 
 const serviceWaitTimes = {
   postgres: 1000,
-  redis: 2000,
-  rabbitmq: 3000,
+  redis: 5000,
+  rabbitmq: 5000,
   nginx: 1000,
 };
 
