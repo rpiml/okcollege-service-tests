@@ -1,54 +1,69 @@
 // @flow
 
-import { spawn } from 'child_process';
+import { spawn, exec } from 'child_process';
 import path from 'path';
 import { writeFileSync } from 'fs';
-import Docker from 'dockerode';
 
-
-const dockerComposePath = path.resolve(__dirname, '..', '..', '..', 'docker-compose.yml');
+const okcPath = path.resolve(__dirname, '..', '..', '..');
 const testLogs = [];
 const coreServices = ['postgres', 'redis', 'rabbitmq', 'nginx'];
 
 const serviceWaitTimes = {
+  postgres: 1000,
+  redis: 1000,
+  rabbitmq: 2000,
+  nginx: 1000,
 };
 
 const serviceProcesses = {};
 
-let dockerDaemon;
+let logging = false;
+
 let systemCleaned = false;
 export async function cleanSystem() : Promise<*> {
   // For now we only clean once
   if (!systemCleaned) {
     console.log('Shutting down containers...');
-    dockerDaemon = new Docker();
-    await new Promise((resolve) => {
-      // Shut down all currently running containers
-      dockerDaemon.listContainers((err, containers) => {
-        Promise.all([containers.map((containerInfo) => new Promise((onStop) => {
-          dockerDaemon.getContainer(containerInfo.Id).stop(() => onStop());
-        }))]).then(resolve);
+    await new Promise(resolve => {
+      console.log("running exec");
+      exec('docker-compose down', {
+        cwd: okcPath,
+      }, (err, stdout, stderr) => {
+        console.log(stdout.toString(), stderr.toString());
+        console.log('Containers shut down.');
+        resolve();
+        systemCleaned = true;
       });
     });
-    console.log('Containers shut down.');
-    systemCleaned = true;
+    console.log('Promise over');
   }
 }
 
 export async function startCoreServices() {
   await cleanSystem();
-  await Promise.all(coreServices.map((service) => startService(service)));
+  console.log('system cleaned');
+  await startServices(coreServices);
 }
 
 function dataLogger(context: string) {
   return (data: Buffer) => {
+    if (logging){
+      console.log(data.toString());
+    }
     testLogs.push(`${context}:${data.toString()}`);
   };
 }
 
 export async function startService(serviceName: string) {
+  return await startServices([serviceName]);
+}
+
+export async function startServices(services: Array<string>) {
+  console.log("Starting services", services);
   // Start Service Process
-  const proc = spawn('docker-compose', ['-f', dockerComposePath, 'up', serviceName]);
+  const proc = spawn('docker-compose', ['up'].concat(services), {
+    cwd: okcPath
+  });
 
   // Listen for incoming data
   proc.stdout.on('data', dataLogger('stdout'));
@@ -63,11 +78,13 @@ export async function startService(serviceName: string) {
   });
 
   // Set service in process registy
-  serviceProcesses[serviceName] = proc;
+  services.forEach((serviceName) => {
+    serviceProcesses[serviceName] = proc;
+  });
 
   // Wait until service startes
   // TODO add new methods (e.g. watching stdout) to wait for services to start
-  const waitTime = serviceWaitTimes[serviceName] || 10000;
+  const waitTime = Math.max(...services.map((n) => serviceWaitTimes[n] || 10000));
   await new Promise((resolve) => {
     setTimeout(() => resolve(), waitTime);
   });
@@ -85,6 +102,10 @@ export async function stopService(serviceName: string): Promise<*> {
     serviceProcesses[serviceName].kill();
     serviceProcesses[serviceName] = undefined;
   }
+}
+
+export function startLogging() {
+  logging = true;
 }
 
 export async function stopServices() {
