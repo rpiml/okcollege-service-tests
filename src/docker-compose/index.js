@@ -10,8 +10,8 @@ const coreServices = ['postgres', 'redis', 'rabbitmq', 'nginx'];
 
 const serviceWaitTimes = {
   postgres: 1000,
-  redis: 1000,
-  rabbitmq: 2000,
+  redis: 2000,
+  rabbitmq: 3000,
   nginx: 1000,
 };
 
@@ -19,24 +19,19 @@ const serviceProcesses = {};
 
 let logging = false;
 
-let systemCleaned = false;
 export async function cleanSystem() : Promise<*> {
   // For now we only clean once
-  if (!systemCleaned) {
-    console.log('Shutting down containers...');
-    await new Promise(resolve => {
-      console.log("running exec");
-      exec('docker-compose down', {
-        cwd: okcPath,
-      }, (err, stdout, stderr) => {
-        console.log(stdout.toString(), stderr.toString());
-        console.log('Containers shut down.');
-        resolve();
-        systemCleaned = true;
-      });
+  console.log('Shutting down containers...');
+  await stopServices();
+  await new Promise((resolve) => {
+    exec('docker-compose down', {
+      cwd: okcPath,
+    }, (err, stdout, stderr) => {
+      console.log(stdout.toString(), stderr.toString());
+      console.log('Containers shut down.');
+      resolve();
     });
-    console.log('Promise over');
-  }
+  });
 }
 
 export async function startCoreServices() {
@@ -73,8 +68,8 @@ export async function startServices(services: Array<string>) {
   let procClosed = false;
   proc.on('close', () => {
     procClosed = true;
-    console.log(serviceName, 'closed');
-    testLogs.push(`${serviceName} closed`);
+    console.log(services, 'closed');
+    testLogs.push(`${services} closed`);
   });
 
   // Set service in process registy
@@ -109,7 +104,7 @@ export function startLogging() {
 }
 
 export async function stopServices() {
-  await Promise.all(serviceProcesses.keys().map((serviceName) => stopService(serviceName)));
+  await Promise.all(Object.keys(serviceProcesses).map((serviceName) => stopService(serviceName)));
 }
 
 export function writeLogs(logPath: string = '/tmp/okcservices.log') {
@@ -120,7 +115,3 @@ export function writeLogs(logPath: string = '/tmp/okcservices.log') {
 export function printLogs() {
   console.log(testLogs.join('\n'));
 }
-
-process.on('exit', () => {
-  stopServices();
-});

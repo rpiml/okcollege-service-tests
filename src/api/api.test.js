@@ -15,7 +15,6 @@ describe('api tests', () => {
   const apiURL = 'http://localhost:8080/api';
 
   it('api smoke test', async () => {
-    console.log("running smoke test");
     await new Promise((resolve) => {
       request(apiURL, (err, res, body) => {
         expect(body).toBe('okcollege server api');

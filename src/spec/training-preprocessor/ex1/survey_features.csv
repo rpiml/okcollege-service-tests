@@ -1,4 +1,4 @@
-,type,categories,,,,
+question_id,type,categories,,,,
 like-art,categorical,2,no,yes,,
 like-computer,categorical,2,no,yes,,
 went-to,categorical,4,fine-arts-school,computer-school,digital-arts-school,culinary-college
