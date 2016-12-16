@@ -35,9 +35,18 @@ export async function cleanSystem() : Promise<*> {
 }
 
 export async function startCoreServices() {
-  await cleanSystem();
-  console.log('system cleaned');
-  await startServices(coreServices);
+  try {
+    await cleanSystem();
+  } catch (err) {
+    console.log('Error while cleaning system');
+    throw err;
+  }
+  try {
+    await startServices(coreServices);
+  } catch (err) {
+    console.log('Error while starting core services');
+    throw err;
+  }
 }
 
 function dataLogger(context: string) {

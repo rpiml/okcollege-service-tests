@@ -39,6 +39,7 @@
   "author": "Severin Ibarluzea",
   "license": "MIT",
   "jest": {
+    "verbose": true,
     "testEnvironment": "node",
     "automock": false,
     "moduleFileExtensions": [
@@ -56,6 +57,7 @@
   },
   "dependencies": {
     "amqplib": "^0.5.1",
+    "amqplib-rpc": "^2.0.3",
     "babel-runtime": "~6.20.0",
     "dockerode": "^2.3.1",
     "redis": "^2.6.3",
