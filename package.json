@@ -1,7 +1,7 @@
 {
-  "name": "node-flowtype-boilerplate",
+  "name": "okcollege-service-tests",
   "version": "0.0.0",
-  "description": "Minimalistic boilerplate to quick-start Node.js development in ES6+ (stage-3) with Flow type checking.",
+  "description": "OkCollege Service Testing",
   "engineStrict": true,
   "engines": {
     "node": ">= 6.2"
@@ -11,6 +11,7 @@
     "babel-core": "~6.20.0",
     "babel-eslint": "~7.1.1",
     "babel-jest": "~17.0.2",
+    "babel-plugin-inline-import": "^2.0.4",
     "babel-plugin-transform-async-to-generator": "~6.16.0",
     "babel-plugin-transform-es2015-modules-commonjs": "~6.18.0",
     "babel-plugin-transform-flow-strip-types": "~6.18.0",
@@ -22,34 +23,32 @@
     "eslint-plugin-import": "~2.2.0",
     "eslint-plugin-no-async-without-await": "~1.2.0",
     "flow-bin": "~0.37.0",
-    "jest": "~17.0.3"
+    "jest": "^18.0.0"
   },
   "scripts": {
     "clean": "rm -rf coverage dist tmp",
     "lint": "eslint .",
     "postlint": "npm run typecheck",
     "typecheck": "flow check",
-    "pretest": "npm run lint",
     "test": "npm run test-only",
-    "test-only": "jest --coverage",
-    "test:watch": "jest --watch",
+    "test-only": "jest --runInBand",
+    "test:watch": "jest --runInBand --watch",
     "build": "babel src/**/*.js -d dist",
     "build:watch": "babel --watch src/**/*.js -d dist"
   },
-  "author": "Jakub Synowiec <jakub@jakubsynowiec.info> (https://jakubsynowiec.info)",
+  "author": "Severin Ibarluzea",
   "license": "MIT",
-  "repository": {
-    "type": "git",
-    "url": "https://github.com/jsynowiec/node-flowtype-boilerplate.git"
-  },
-  "bugs": {
-    "url": "https://github.com/jsynowiec/node-flowtype-boilerplate/issues"
-  },
-  "homepage": "https://github.com/jsynowiec/node-flowtype-boilerplate#readme",
   "jest": {
+    "verbose": true,
     "testEnvironment": "node",
+    "automock": false,
     "moduleFileExtensions": [
-      "js"
+      "js",
+      "json"
+    ],
+    "testPathIgnorePatterns": [
+      "/node_modules/",
+      "/dist/"
     ],
     "coverageDirectory": "coverage",
     "collectCoverageFrom": [
@@ -57,7 +56,11 @@
     ]
   },
   "dependencies": {
+    "amqplib": "^0.5.1",
+    "amqplib-rpc": "^2.0.3",
     "babel-runtime": "~6.20.0",
+    "dockerode": "^2.3.1",
+    "redis": "^2.6.3",
     "request": "^2.79.0"
   }
 }

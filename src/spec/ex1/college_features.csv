@@ -1,0 +1,5 @@
+attribute_name,type,categories,,
+artsy,categorical,2,no,yes
+computery,categorical,2,no,yes
+best-art,ranking,,,
+best-computers,ranking,,,
