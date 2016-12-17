@@ -13,6 +13,7 @@ const serviceWaitTimes = {
   redis: 5000,
   rabbitmq: 10000,
   nginx: 1000,
+  "ml-predictor": 20000
 };
 
 const serviceProcesses = {};
